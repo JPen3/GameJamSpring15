@@ -46,11 +46,13 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\scrBoundaryMove.cs" />
      <Compile Include="Assets\Scripts\scrCamera.cs" />
      <Compile Include="Assets\Scripts\scrController.cs" />
      <Compile Include="Assets\Scripts\scrFeather.cs" />
      <Compile Include="Assets\Scripts\scrPlayer.cs" />
      <Compile Include="Assets\Scripts\scrPlayerMovement.cs" />
+     <Compile Include="Assets\Scripts\scrSpawnObj.cs" />
      <Compile Include="Assets\Scripts\scrWindStreams.cs" />
      <Compile Include="Assets\Scripts\scrWizard.cs" />
      <Compile Include="Assets\Scripts\scrWizardAttack.cs" />
