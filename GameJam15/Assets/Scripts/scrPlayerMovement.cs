@@ -3,23 +3,26 @@ using System.Collections;
 
 public class scrPlayerMovement : MonoBehaviour 
 {
+	public scrWizard wizardScript;
+
 	//current state of player
 	public PlayerState state = PlayerState.IDLE;
 
 	//Flying
-	public bool idling = true;
-	public bool flying = false;
-	public bool rising = false;
-	public bool falling = false;
-	public bool battling = false;
-	public bool above = false;
+	public bool idling;
+	public bool flying;
+	public bool rising;
+	public bool falling;
+	public bool battling;
+	public bool above;
 
 	private float flySpeed = 0.0F;
 
 	// Use this for initialization
 	void Start () 
 	{
-	
+		above = true;
+		idling = true;
 	}
 	
 	//Update is called once per frame
@@ -68,10 +71,10 @@ public class scrPlayerMovement : MonoBehaviour
 			case PlayerState.RISE;
 				Rise();
 				break;
-			case PlayerState.BATTLE;
+			*/
+			case PlayerState.BATTLE:
 				Battle();
 				break;
-			*/
 		}
 	}
 
@@ -99,7 +102,7 @@ public class scrPlayerMovement : MonoBehaviour
 	bool Battling()
 	{
 		//Rock Paper Scissor Initiated
-		return false;
+		return wizardScript.battling;
 	}
 
 	//Idle state above clouds
@@ -132,7 +135,7 @@ public class scrPlayerMovement : MonoBehaviour
 		{
 			SetFlySpeed(0.0F); //Set player speed to 0
 		}
-		
+
 		//Do nothing unless state changes
 		if(Falling())
 		{
@@ -193,6 +196,24 @@ public class scrPlayerMovement : MonoBehaviour
 		
 		idling = state == PlayerState.IDLE;
 		flying = state == PlayerState.FLY;
+		battling = state == PlayerState.BATTLE;
+	}
+
+	void Battle()
+	{
+		if(!battling)
+		{
+			SetFlySpeed(0.0F);
+		}
+
+		if(Falling())
+		{
+			state = PlayerState.FALL;
+		}
+		else if(!Battling())
+		{
+			state = PlayerState.IDLE;
+		}
 	}
 }
 
