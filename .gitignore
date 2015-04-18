@@ -3,3 +3,9 @@ GameJam15/Temp/
 *.meta
 *.csproj
 *.sln
+*.csproj
+*.bin
+*.dll
+*.mdb
+*.sln
+*.unityproj
