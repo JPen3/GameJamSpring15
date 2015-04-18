@@ -4,6 +4,7 @@ using System.Collections;
 public class scrPlayerMovement : MonoBehaviour 
 {
 	public scrWizard wizardScript;
+	public scrPlayer playerScript;
 
 	//current state of player
 	public PlayerState state = PlayerState.IDLE;
@@ -21,7 +22,7 @@ public class scrPlayerMovement : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		above = true;
+		above = false;
 		idling = true;
 	}
 	
@@ -33,25 +34,11 @@ public class scrPlayerMovement : MonoBehaviour
 		{
 			case PlayerState.IDLE:
 				//Check game layer
-				if(above)
-				{
-					IdleAbove();
-				}
-				else
-				{
-					IdleBelow();
-				}
+				Idle(above);
 				break;
 			case PlayerState.FLY:
 				//Check game layer
-				if(above)
-				{
-					FlyAbove();
-				}
-				else
-				{
-					FlyBelow();
-				}
+				Fly(above);
 
 				//Apply translation/movement
 				float transVertical = Input.GetAxis("Vertical") * flySpeed;
@@ -61,17 +48,22 @@ public class scrPlayerMovement : MonoBehaviour
 				transform.Translate(transHorizontal, transVertical, 0);
 
 				//Clamp position
-				transform.position = new Vector3(Mathf.Clamp(transform.position.x, -10.0F, 10.0F), Mathf.Clamp(transform.position.y, 0.0F, 10.0F), 0);
+				if(above)
+				{
+					transform.position = new Vector3(Mathf.Clamp(transform.position.x, -10.0F, 10.0F), Mathf.Clamp(transform.position.y, 0.0F, 10.0F), 0);
+				}
+				else
+				{
+					transform.position = new Vector3(Mathf.Clamp(transform.position.x, -10.0F, 10.0F), Mathf.Clamp(transform.position.y, -20.0F, -10.0F), 0);
+				}
 	
 				break;
-			/*
-			case PlayerState.FALL;
-				Fall();
+			case PlayerState.FALL:
+				Fall(above);
 				break;
-			case PlayerState.RISE;
+			case PlayerState.RISE:
 				Rise();
 				break;
-			*/
 			case PlayerState.BATTLE:
 				Battle();
 				break;
@@ -88,14 +80,14 @@ public class scrPlayerMovement : MonoBehaviour
 	bool Falling()
 	{
 		//Lose to battle?
-		return false;
+		return playerScript.damaged;
 	}
 
 	//Is the player rising?
 	bool Rising()
 	{
 		//Collect enough feathers?
-		return false;
+		return playerScript.rising;
 	}
 
 	//Is the player battling?
@@ -106,86 +98,79 @@ public class scrPlayerMovement : MonoBehaviour
 	}
 
 	//Idle state above clouds
-	void IdleBelow()
+	void Idle(bool above)
 	{
 		if(!idling) 
 		{
 			SetFlySpeed(0.0F); //Set player speed to 0
 		}
 
-		//Do nothing unless state changes
-		if(Rising())
+		if(above)
 		{
-			state = PlayerState.RISE;
+			//Do nothing unless state changes
+			if(Falling())
+			{
+				state = PlayerState.FALL;
+			}
+			else if(Battling()) 
+			{
+				state = PlayerState.BATTLE;
+			}
+			else if(Flying())
+			{
+				state = PlayerState.FLY;
+			}
 		}
-		else if(Falling())
+		else
 		{
-			state = PlayerState.FALL;
-		}
-		else if(Flying()) 
-		{
-			state = PlayerState.FLY;
-		}
-	}
-
-	//Idle state below clouds
-	void IdleAbove()
-	{
-		if(!idling) 
-		{
-			SetFlySpeed(0.0F); //Set player speed to 0
-		}
-
-		//Do nothing unless state changes
-		if(Falling())
-		{
-			state = PlayerState.FALL;
-		}
-		else if(Battling()) 
-		{
-			state = PlayerState.BATTLE;
-		}
-		else if(Flying())
-		{
-			state = PlayerState.FLY;
+			//Do nothing unless state changes
+			if(Rising())
+			{
+				state = PlayerState.RISE;
+			}
+			else if(Falling())
+			{
+				state = PlayerState.FALL;
+			}
+			else if(Flying()) 
+			{
+				state = PlayerState.FLY;
+			}
 		}
 	}
 
-	void FlyBelow()
+	void Fly(bool above)
 	{
 		if(!flying) 
 		{
 			SetFlySpeed(10.0F); //Set player speed to 6
 		}
 
-		if(Rising())
+		if(above)
 		{
-			state = PlayerState.RISE;
+			if(Falling())
+			{
+				state = PlayerState.FALL;
+			}
+			else if(Battling())
+			{
+				state = PlayerState.BATTLE;
+			}
+			else if(!Flying())
+			{
+				state = PlayerState.IDLE;
+			}
 		}
-		else if(!Flying())
+		else
 		{
-			state = PlayerState.IDLE;
-		}
-	}
-
-	void FlyAbove()
-	{
-		if(!flying) 
-		{
-			SetFlySpeed(10.0F); //Set player speed to 6
-		}
-		
-		if(Falling())
-		{
-			state = PlayerState.FALL;
-		}
-		else if(Battling())
-		{
-			state = PlayerState.BATTLE;
-		}
-		else if(!Flying())
-		{
-			state = PlayerState.IDLE;
+			if(Rising())
+			{
+				state = PlayerState.RISE;
+			}
+			else if(!Flying())
+			{
+				state = PlayerState.IDLE;
+			}
 		}
 	}
 
@@ -197,6 +182,8 @@ public class scrPlayerMovement : MonoBehaviour
 		idling = state == PlayerState.IDLE;
 		flying = state == PlayerState.FLY;
 		battling = state == PlayerState.BATTLE;
+		falling = state == PlayerState.FALL;
+		rising = state == PlayerState.RISE;
 	}
 
 	void Battle()
@@ -212,6 +199,42 @@ public class scrPlayerMovement : MonoBehaviour
 		}
 		else if(!Battling())
 		{
+			state = PlayerState.IDLE;
+		}
+	}
+
+	void Fall(bool above)
+	{
+		if(!falling)
+		{
+			SetFlySpeed(0.0F);
+		}
+
+		if(above)
+		{
+			if(!Falling())
+			{
+				this.above = false;
+				state = PlayerState.IDLE;
+			}
+		}
+		else
+		{
+			Debug.Log("YOU LOSE!");
+		}
+	}
+
+	void Rise()
+	{
+		if(!rising)
+		{
+			SetFlySpeed(0.0F);
+		}
+
+		if(!Rising())
+		{
+			Debug.Log("Done Rising");
+			above = true;
 			state = PlayerState.IDLE;
 		}
 	}
