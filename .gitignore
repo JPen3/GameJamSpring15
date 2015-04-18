@@ -1,3 +1,5 @@
-GameJam15/Library/metadata/
+GameJam15/Library/
 GameJam15/Temp/
 *.meta
+*.csproj
+*.sln
