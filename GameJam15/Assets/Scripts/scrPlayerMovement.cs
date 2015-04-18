@@ -223,7 +223,7 @@ public class scrPlayerMovement : MonoBehaviour
 			Debug.Log("YOU LOSE!");
 		}
 	}
-
+	
 	void Rise()
 	{
 		if(!rising)
