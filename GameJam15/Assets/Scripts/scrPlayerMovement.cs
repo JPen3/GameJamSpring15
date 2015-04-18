@@ -3,7 +3,7 @@ using System.Collections;
 
 public class scrPlayerMovement : MonoBehaviour 
 {
-	public scrWizard wizardScript;
+	//public scrWizard wizardScript;
 
 	//current state of player
 	public PlayerState state = PlayerState.IDLE;
@@ -73,7 +73,7 @@ public class scrPlayerMovement : MonoBehaviour
 				break;
 			*/
 			case PlayerState.BATTLE:
-				Battle();
+				//Battle();
 				break;
 		}
 	}
@@ -99,11 +99,11 @@ public class scrPlayerMovement : MonoBehaviour
 	}
 
 	//Is the player battling?
-	bool Battling()
+	/*bool Battling()
 	{
 		//Rock Paper Scissor Initiated
-		return wizardScript.battling;
-	}
+		//return wizardScript.battling;
+	}*/
 
 	//Idle state above clouds
 	void IdleBelow()
@@ -141,10 +141,10 @@ public class scrPlayerMovement : MonoBehaviour
 		{
 			state = PlayerState.FALL;
 		}
-		else if(Battling()) 
+		/*else if(Battling()) 
 		{
 			state = PlayerState.BATTLE;
-		}
+		}*/
 		else if(Flying())
 		{
 			state = PlayerState.FLY;
@@ -179,10 +179,10 @@ public class scrPlayerMovement : MonoBehaviour
 		{
 			state = PlayerState.FALL;
 		}
-		else if(Battling())
+		/*else if(Battling())
 		{
 			state = PlayerState.BATTLE;
-		}
+		}*/
 		else if(!Flying())
 		{
 			state = PlayerState.IDLE;
@@ -199,7 +199,7 @@ public class scrPlayerMovement : MonoBehaviour
 		battling = state == PlayerState.BATTLE;
 	}
 
-	void Battle()
+	/*void Battle()
 	{
 		if(!battling)
 		{
@@ -214,7 +214,7 @@ public class scrPlayerMovement : MonoBehaviour
 		{
 			state = PlayerState.IDLE;
 		}
-	}
+	}*/
 }
 
 public enum PlayerState {IDLE, FLY, RISE, FALL, BATTLE};
