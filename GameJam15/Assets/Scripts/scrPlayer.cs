@@ -100,5 +100,8 @@ public class scrPlayer : MonoBehaviour
 				feathers = 0;
 			}
 		}
+		if (other.tag.Equals("Obstacle")) {
+			Debug.Log("You hit an obstacle!");
+		}
 	}
 }
