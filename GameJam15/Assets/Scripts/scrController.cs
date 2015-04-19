@@ -93,7 +93,7 @@ public class scrController : MonoBehaviour
 		
 		if(windTimer >= windTime)
 		{
-			Instantiate(windStream, new Vector3(Random.Range(-10.0F, 10.0F), Random.Range(-20.0F, -10.0F), Random.Range(5.0F, 40.0F)), Quaternion.identity);
+			Instantiate(windStream, new Vector3(Random.Range(-10.0F, 10.0F), Random.Range(-20.0F, 15.0F), Random.Range(5.0F, 40.0F)), Quaternion.identity);
 			windTimer = 0.0F;
 			windTime = Random.Range(1, 3);
 		}

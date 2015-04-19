@@ -8,12 +8,14 @@ public class scrSpawnObj : MonoBehaviour
 	public Transform[] spawnPoints;
 	
 	// Use this for initialization
-	void Start () {
+	void Start () 
+	{
 		InvokeRepeating ("Spawn", spawnTime, spawnTime);
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () 
+	{
 		
 	}
 	
@@ -23,9 +25,20 @@ public class scrSpawnObj : MonoBehaviour
 		int spawnNum = Random.Range (1, 3);
 		
 		// Create an instance of the enemy prefab at the randomly selected spawn point's position and rotation.
-		for (int i = 0; i < spawnNum; i++) {
-			int spawnPointIndex = Random.Range (0, spawnPoints.Length);
+		for (int i = 0; i < spawnNum; i++) 
+		{
+			int spawnPointIndex;
 			int boundaryIndex = Random.Range (0, boundary.Length);
+
+			if(boundary[boundaryIndex].tag.Equals("Tower"))
+			{
+				spawnPointIndex = Random.Range(6, spawnPoints.Length);
+			}
+			else
+			{
+				spawnPointIndex = Random.Range (0, spawnPoints.Length);
+			}
+
 			Instantiate (boundary [boundaryIndex], spawnPoints [spawnPointIndex].position, spawnPoints [spawnPointIndex].rotation);
 		}
 	}

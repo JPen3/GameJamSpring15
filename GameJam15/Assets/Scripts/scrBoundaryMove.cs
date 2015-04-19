@@ -19,7 +19,6 @@ public class scrBoundaryMove : MonoBehaviour {
 
 		if(transform.position.z <= -5.0F)
 		{
-			Debug.Log ("It's gone Jim.");
 			Destroy(gameObject);
 		}
 	}
