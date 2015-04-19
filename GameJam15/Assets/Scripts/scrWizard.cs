@@ -137,7 +137,7 @@ public class scrWizard : MonoBehaviour
 	void Attack()
 	{
 		//Pick a number between 1 and 3
-		attack = Random.Range(1,3);
+		attack = Random.Range(1,4);
 		Debug.Log(attack);
 		
 		switch(attack)
